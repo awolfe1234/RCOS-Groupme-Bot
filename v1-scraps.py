@@ -2,19 +2,36 @@ import requests
 import string
 import time
 
+def botinfo():
+    global botid
+    global uid
+    f = open("pass.txt", "r")
+    lines = [line.rstrip('\n') for line in f]
+    botid = lines[0]
+    uid = lines[1]
+
+
 def echo(toRepeate):
     print("CMD Call: Echo ")
     ret(toRepeate[toRepeate.find("echo"):])
-    return;
+    return
 
 
 #Controls the out flow message
 def ret(msg):
-    post_params = {'bot_id': 'BOTID', 'text': msg}
+    post_params = {'bot_id': botid, 'text': msg}
     requests.post('https://api.groupme.com/v3/bots/post', params=post_params)
-    return;
+    return
 
-request_params = {'token': 'USERID'}
+
+
+
+
+#main
+
+
+botinfo() #fetch sensitive bot info 
+request_params = {'token': uid}
 ender = 0
 target = 'Aidan'
 fc = []
@@ -49,11 +66,8 @@ while True:
             if (('?' in message['text'] or 'should' in message['text']) and message['id'] not in fc):
                 to_r = 'Nah man'
                 fc.append(message['id'])
-                post_params = {'bot_id': 'BOTID', 'text': to_r}
+                post_params = {'bot_id': botid, 'text': to_r}
                 requests.post('https://api.groupme.com/v3/bots/post', params=post_params)
                 request_params['since_id'] = message['id']
 
     time.sleep(5)
-
-
-
